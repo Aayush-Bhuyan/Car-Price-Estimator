@@ -123,13 +123,13 @@ def load_data():
 
     df_audi["brand"] = "Audi"
     df_vw["brand"] = "Volkswagen"
-    df = pd.concat([df_audi, df_vw], ignore_index=True)
+    df = pd.concat([df_audi, df_vw], ignore_index=True, copy=False)
     return df
 
 @st.cache_data(show_spinner=False)
 def clean_and_engineer(df):
     df = df[(df["engineSize"] != 0) & df["price"].between(500, 100000)].copy()
-    df["car_age"] = 2020 - df["year"]
+    df["car_age"] = (2020 - df["year"]).clip(lower=0)
     df["mileage_per_year"] = df["mileage"] / df["car_age"].replace([np.inf, -np.inf], 0).fillna(0)
     return df
 
@@ -138,10 +138,11 @@ def train_models(df):
     y = df["price"]
     df_f = df.drop(columns=["price", "model", "year"])
     x = pd.get_dummies(df_f, columns=["transmission", "fuelType", "brand"], drop_first=True, dtype=int)
+    model_features = x.columns.tolist()
     X_tr, X_te, y_tr, y_te = train_test_split(x, y, test_size=0.2, random_state=42)
 
     lr = LinearRegression().fit(X_tr, y_tr)
-    rf = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1).fit(X_tr, y_tr)
+    rf = RandomForestRegressor(n_estimators=100,min_samples_leaf=3, random_state=42, n_jobs=-1).fit(X_tr, y_tr)
 
     lr_pred = lr.predict(X_te)
     rf_pred = rf.predict(X_te)
