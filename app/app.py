@@ -234,7 +234,7 @@ elif page == "EDA":
     st.markdown('<p class="page-title">What drives used car prices?</p>', unsafe_allow_html=True)
     st.markdown('hr class=="divider">', unsafe_allow_html=True)
     
-    tab1, tab2, tab3 = st.labs(["DISTRIBUTIONS", "CORRELATIONS", "BRAND BREAKDOWN"])
+    tab1, tab2, tab3 = st.tabs(["DISTRIBUTIONS", "CORRELATIONS", "BRAND BREAKDOWN"])
 
     with tab1:
         c1, c2 = st.columns(2)
@@ -333,8 +333,8 @@ elif page == "Models":
 
     with tab1:
         c1, c2 = st.columns(2)
-        for col, key, label, color in [(c1, "lr", "Linear Regression", AUDI_COL), (c2, "rf", "Random Forest", ACCENT)]:
-            with col:
+        for container, key, label, color in [(c1, "lr", "Linear Regression", AUDI_COL), (c2, "rf", "Random Forest", ACCENT)]:
+            with container:
                 st.markdown(f'<p class="section-title">{label}</p>', unsafe_allow_html=True)
                 fig, ax = plt.subplots(figsize=(5, 4.5))
                 lim = (0, 80000)
