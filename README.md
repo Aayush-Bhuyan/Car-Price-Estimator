@@ -70,8 +70,8 @@ No CSV downloads needed - data loads automatically from the source repository.
 ## Project Structure
 
 car-price-estimator/
-├── app.py              # Streamlit dashboard (4 pages)
-├── requirements.txt    # Python dependencies
+├── app.py              
+├── requirements.txt    
 ├── .gitignore
 └── README.md
 
