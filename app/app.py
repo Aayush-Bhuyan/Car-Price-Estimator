@@ -310,7 +310,7 @@ elif page == "EDA":
         fig.tight_layout(); st.pyplot(fig); plt.close()
 
 # Page: Models
-elif page == "Models":
+elif page == "Modeling":
     st.markdown('<p class="section-title">Model Evaluation</p>', unsafe_allow_html=True)
     st.markdown('<p class="page-title">Linear Regression vs Random Forest</p>', unsafe_allow_html=True)
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
@@ -361,6 +361,8 @@ elif page == "Models":
             ax.barh(top_lr["Feature"], top_lr["Coef"], color=colors, edgecolor="none", height=0.65)
             ax.axvline(0, color="#444", linewidth=0.8)
             ax.tick_params(labelsize=8)
+            fmt_lr = mticker.FuncFormatter(lambda v, _: f"£{v/1000:.0f}k" if v != 0 else "0")
+            ax.xaxis.set_major_formatter(fmt_lr)
             fig.tight_layout(); st.pyplot(fig); plt.close()
         with c2:
             st.markdown('<p class="section-title">RF — Feature Importance</p>', unsafe_allow_html=True)
