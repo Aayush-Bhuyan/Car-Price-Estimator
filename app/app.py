@@ -131,6 +131,7 @@ def clean_and_engineer(df):
     df = df[(df["engineSize"] != 0) & df["price"].between(500, 100000)].copy()
     df["car_age"] = (2020 - df["year"]).clip(lower=0)
     df["mileage_per_year"] = df["mileage"] / df["car_age"].replace([np.inf, -np.inf], 0).fillna(0)
+    df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=df.select_dtypes("number").columns)
     return df
 
 @st.cache_data(show_spinner=False)
@@ -162,7 +163,7 @@ def train_models(df):
             "r2": r2_score(y_te, rf_pred),
             "mae": mean_absolute_error(y_te, rf_pred),
         },
-        "X": X, "y_te": y_te, "X_te": X_te,
+        "X": x, "y_te": y_te, "X_te": X_te,
     }
     return results
 
@@ -199,7 +200,7 @@ if page == "Overview":
     c4.metric("RF MAE", f"£{res['rf']['mae']:,}")
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
-    col_a, col_b = st.columns(4)
+    col_a, col_b = st.columns(2)
     with col_a:
         st.markdown('<p class="section-title">Price Distribution</p>', unsafe_allow_html=True)
         fig, ax = plt.subplots(figsize=(6, 3.2))
