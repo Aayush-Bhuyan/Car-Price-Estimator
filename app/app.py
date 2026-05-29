@@ -243,7 +243,7 @@ elif page == "EDA":
             fig, ax = plt.subplots(figsize=(5.5, 3))
             ax.hist(df["mileage"], bins=60, color=ACCENT, alpha=0.8, edgecolor="none")
             ax.set_xlabel("Mileage (miles)")
-            ax.axis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{x/1000:.0f}k"))
+            ax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{x/1000:.0f}k"))
             fig.tight_layout(); st.pyplot(fig); plt.close()
         with c2:
             st.markdown('<p class="section-title">Engine Size</p>', unsafe_allow_html=True)
@@ -277,7 +277,7 @@ elif page == "EDA":
 
         with c2:
             st.markdown('<p class="section-title">Correlation with Price</p>', unsafe_allow_html=True)
-            price_corr = corr["price"].drop("price").sort_values()
+            price_corr = corr["price"].drop("price", errors="ignore").sort_values()
             colors = [ACCENT if v > 0 else "#f87171" for v in price_corr.values]
             fig, ax = plt.subplots(figsize=(4.5, 4.5))
             ax.barh(price_corr.index, price_corr.values, color=colors, edgecolor="none", height=0.6)
